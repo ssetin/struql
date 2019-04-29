@@ -64,7 +64,9 @@ func main() {
 		{FieldName: "Oi.Santa.Clause", Value: "Tree"},
 	}
 	fmt.Println("Result: ")
-	sq.Where(filter...).Print()
+	result := make(struql.RowCollection, 0, 5)
+
+	sq.Where(result, filter...).Print()
 
 	fmt.Println("FIN")
 }

@@ -82,9 +82,10 @@ func BenchmarkIterateSearch(b *testing.B) {
 
 // BenchmarkSrtuqSearch ...
 func BenchmarkSrtuqSearch(b *testing.B) {
+	result := make(RowCollection, 0, 5)
 
 	for i := 0; i < b.N; i++ {
-		_ = sq.Where(filter...)
+		_ = sq.Where(result, filter...)
 	}
 
 }
@@ -96,3 +97,4 @@ func BenchmarkSrtuqSearch(b *testing.B) {
 //BenchmarkIterateSearch-2        100000000               10.0 ns/op             0 B/op          0 allocs/op
 //BenchmarkSrtuqSearch-2            2000000                596 ns/op            16 B/op          1 allocs/op
 //BenchmarkSrtuqSearch-2            3000000                607 ns/op            16 B/op          1 allocs/op
+//BenchmarkSrtuqSearch-2            3000000                440 ns/op             0 B/op          0 allocs/op
