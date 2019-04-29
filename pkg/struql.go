@@ -3,7 +3,6 @@ package struql
 import (
 	"errors"
 	"reflect"
-	"sync"
 )
 
 // StruQL ...
@@ -11,8 +10,6 @@ type StruQL struct {
 	Rows RowCollection
 
 	currentRow int
-	// TODO:
-	pool sync.Pool
 }
 
 // Init ...
@@ -25,8 +22,7 @@ func (s *StruQL) Init(object interface{}) error {
 	}
 
 	s.Rows = make(RowCollection, 0, 5)
-	row := &Row{}
-	row.Init()
+	row := NewRow()
 	s.Rows = append(s.Rows, row)
 	s.currentRow = 0
 
@@ -40,8 +36,8 @@ func (s *StruQL) Where(filters ...Filter) RowCollection {
 }
 
 // expandRow ...
-func (s *StruQL) expandRow(fc map[string]Field) {
-	newRow := &Row{}
+func (s *StruQL) expandRow(fc map[string]*Field) {
+	newRow := NewRow()
 	newRow.copyFields(fc)
 
 	s.Rows = append(s.Rows, newRow)
@@ -77,7 +73,7 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 					elemKind := fieldValue.Index(0).Kind()
 
 					if elemKind == reflect.Struct {
-						fieldsToCopy := make(map[string]Field)
+						fieldsToCopy := make(map[string]*Field)
 						for k, v := range s.Rows[s.currentRow].Fields {
 							fieldsToCopy[k] = v
 						}

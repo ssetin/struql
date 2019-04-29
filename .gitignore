@@ -1,0 +1,9 @@
+debug
+result
+main
+*.out
+*.test
+*.pdf
+*.svg
+*DS_Store
+ue_*

@@ -1,23 +1,32 @@
 package struql
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // Row ...
 type Row struct {
-	Fields map[string]Field
+	Fields map[string]*Field
 }
 
 // RowCollection ...
-type RowCollection []*Row
+type RowCollection []Row
 
-// Init ...
-func (r *Row) Init() {
-	r.Fields = make(map[string]Field)
+// NewRow ...
+func NewRow() Row {
+	row := Row{}
+	row.Init()
+	return row
 }
 
 // Init ...
-func (r *Row) copyFields(fc map[string]Field) {
-	r.Fields = make(map[string]Field)
+func (r *Row) Init() {
+	r.Fields = make(map[string]*Field)
+}
+
+// Init ...
+func (r *Row) copyFields(fc map[string]*Field) {
+	r.Fields = make(map[string]*Field)
 	for k, v := range fc {
 		r.Fields[k] = v
 	}
@@ -26,7 +35,7 @@ func (r *Row) copyFields(fc map[string]Field) {
 // FieldByName ...
 func (r *Row) FieldByName(name string) *Field {
 	if f, ok := r.Fields[name]; ok {
-		return &f
+		return f
 	}
 	return nil
 }
@@ -37,18 +46,16 @@ func (r *Row) AddField(name string, value interface{}) {
 		return
 	}
 
-	newField := Field{
-		Name:  name,
+	newField := &Field{
 		Value: value,
-		IsSet: true,
 	}
 	r.Fields[name] = newField
 }
 
 // PrintValues ...
 func (r *Row) PrintValues() {
-	for _, f := range r.Fields {
-		fmt.Printf("%s: [%v]\t", f.Name, f.Value)
+	for fname, f := range r.Fields {
+		fmt.Printf("%s: [%v]\t", fname, f.Value)
 	}
 	fmt.Println("")
 }
@@ -63,13 +70,25 @@ func (r *Row) PrintHeaders() {
 
 // Where ...
 func (r RowCollection) Where(filters ...Filter) RowCollection {
-	result := make(RowCollection, 0, 1)
-	for _, filter := range filters {
-		for _, row := range r {
-			field := row.FieldByName(filter.FieldName)
+	var (
+		ok         int
+		filtersLen int
+		result     RowCollection
+		field      *Field
+	)
+	filtersLen = len(filters)
+	result = make(RowCollection, 0, 5)
+
+	for _, row := range r {
+		ok = 0
+		for _, filter := range filters {
+			field = row.FieldByName(filter.FieldName)
 			if field != nil && field.Value == filter.Value {
-				result = append(result, row)
+				ok++
 			}
+		}
+		if ok == filtersLen {
+			result = append(result, row)
 		}
 	}
 	return result

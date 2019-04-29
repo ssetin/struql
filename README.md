@@ -1,1 +1,4 @@
 # struql
+
+
+work in progress
