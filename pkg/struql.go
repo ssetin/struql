@@ -31,8 +31,8 @@ func (s *StruQL) Init(object interface{}) error {
 }
 
 // Where ...
-func (s *StruQL) Where(filters ...Filter) RowCollection {
-	return s.Rows.Where(filters...)
+func (s *StruQL) Where(result RowCollection, filters ...Filter) (RowCollection, error) {
+	return s.Rows.Where(result, filters...)
 }
 
 // expandRow ...

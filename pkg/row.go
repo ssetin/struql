@@ -2,6 +2,7 @@ package struql
 
 import (
 	"fmt"
+	"reflect"
 )
 
 // Row ...
@@ -48,6 +49,7 @@ func (r *Row) AddField(name string, value interface{}) {
 
 	newField := &Field{
 		Value: value,
+		kind:  reflect.ValueOf(value).Kind(),
 	}
 	r.Fields[name] = newField
 }
@@ -69,26 +71,25 @@ func (r *Row) PrintHeaders() {
 }
 
 // Where ...
-func (r RowCollection) Where(filters ...Filter) RowCollection {
+func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollection, error) {
 	var (
 		ok         int
 		filtersLen int
 		field      *Field
-		//fieldValue interface{}
+		err        error
+		compareOk  bool
 	)
 	filtersLen = len(filters)
-	result := make(RowCollection, 0, 2)
 
 	for _, row := range r {
 		ok = 0
 		for _, filter := range filters {
 			if field = row.FieldByName(filter.FieldName); field != nil {
-				//fieldValue = field.Value
-				/*if filter.Modifier != nil {
-					fieldValue = filter.Modifier(fieldValue.(string))
-				}*/
-				if field.Value == filter.Value {
+				if compareOk, err = field.compare(filter.Value, filter.Operation); compareOk {
 					ok++
+				}
+				if err != nil {
+					return nil, err
 				}
 			}
 		}
@@ -96,7 +97,7 @@ func (r RowCollection) Where(filters ...Filter) RowCollection {
 			result = append(result, row)
 		}
 	}
-	return result
+	return result, nil
 }
 
 // AddField ...

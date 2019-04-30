@@ -1,6 +1,7 @@
 package struql
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -55,7 +56,7 @@ var (
 	sq     StruQL
 	filter = []Filter{
 		{FieldName: "Oi.Descr", Value: "Debug"},
-		{FieldName: "Oi.Santa.Clause", Value: "Tree"},
+		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparsionBeginWith},
 	}
 )
 
@@ -70,7 +71,7 @@ func BenchmarkIterateSearch(b *testing.B) {
 		for _, ois := range dev.Oi {
 			if ois.Descr == "Debug" {
 				for _, snts := range ois.Santa {
-					if snts.Clause == "Tree" {
+					if strings.HasPrefix(snts.Clause, "Tre") {
 						_ = snts.ID
 					}
 				}
@@ -82,9 +83,10 @@ func BenchmarkIterateSearch(b *testing.B) {
 
 // BenchmarkSrtuqSearch ...
 func BenchmarkSrtuqSearch(b *testing.B) {
+	result := make(RowCollection, 0, 2)
 
 	for i := 0; i < b.N; i++ {
-		_ = sq.Where(filter...)
+		_, _ = sq.Where(result, filter...)
 	}
 
 }
@@ -98,5 +100,5 @@ func BenchmarkSrtuqSearch(b *testing.B) {
 //BenchmarkSrtuqSearch-2            3000000                607 ns/op            16 B/op          1 allocs/op
 //BenchmarkSrtuqSearch-2            3000000                440 ns/op             0 B/op          0 allocs/op
 
-//BenchmarkIterateSearch-4        200000000                7.02 ns/op            0 B/op          0 allocs/op
-//BenchmarkSrtuqSearch-4           10000000                175 ns/op             0 B/op          0 allocs/op
+//BenchmarkIterateSearch-4        100000000               15.4 ns/op             0 B/op          0 allocs/op
+//BenchmarkSrtuqSearch-4            5000000                237 ns/op             0 B/op          0 allocs/op

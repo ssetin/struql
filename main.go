@@ -14,9 +14,10 @@ type Santa struct {
 
 // Origins ...
 type Origins struct {
-	Code  string
-	Descr string
-	Santa []*Santa
+	Code       string
+	Descr      string
+	Santa      []*Santa
+	Collection []int32
 }
 
 // Device ...
@@ -32,15 +33,20 @@ func Norm(s string) string {
 }
 
 func main() {
-	var sq struql.StruQL
+	var (
+		sq  struql.StruQL
+		err error
+	)
+
 	dev := Device{
 		Number:      99,
 		Model:       "JFQ",
 		Manufacture: "Factory",
 		Oi: []Origins{
 			{
-				Code:  "x256",
-				Descr: "Debug",
+				Code:       "x256",
+				Descr:      "Debug",
+				Collection: []int32{1, 6, 99, 100, 11},
 				Santa: []*Santa{
 					{ID: 1, Clause: "Hoho"},
 					{ID: 2, Clause: "Tree"},
@@ -48,8 +54,9 @@ func main() {
 				},
 			},
 			{
-				Code:  "x2599",
-				Descr: "Release",
+				Code:       "x2599",
+				Descr:      "Release",
+				Collection: []int32{101, 102, 103},
 				Santa: []*Santa{
 					{ID: 1, Clause: "Tooo"},
 					{ID: 2, Clause: "Mooo"},
@@ -64,11 +71,21 @@ func main() {
 	sq.Print()
 
 	filter := []struql.Filter{
-		{FieldName: "Oi.Descr", Value: "Debug", Modifier: Norm},
-		{FieldName: "Oi.Santa.Clause", Value: "Tree"},
+		{FieldName: "Oi.Descr", Value: "Debug"},
+		{FieldName: "Oi.Santa.Clause", Value: "ree", Operation: struql.ComparsionEndWith},
+		{FieldName: "Oi.Collection", Value: int32(100), Operation: struql.ComparsionIn},
+		{FieldName: "Number", Value: 500, Operation: struql.ComparsionLesser},
 	}
 	fmt.Println("Result: ")
-	sq.Where(filter...).Print()
+	dataSet := make(struql.RowCollection, 0, 5)
+
+	dataSet, err = sq.Where(dataSet, filter...)
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return
+	}
+
+	dataSet.Print()
 
 	fmt.Println("FIN")
 }
