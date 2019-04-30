@@ -69,7 +69,7 @@ func (r *Row) PrintHeaders() {
 }
 
 // Where ...
-func (r RowCollection) Where(result RowCollection, filters ...Filter) RowCollection {
+func (r RowCollection) Where(filters ...Filter) RowCollection {
 	var (
 		ok         int
 		filtersLen int
@@ -77,6 +77,7 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) RowCollect
 		//fieldValue interface{}
 	)
 	filtersLen = len(filters)
+	result := make(RowCollection, 0, 2)
 
 	for _, row := range r {
 		ok = 0

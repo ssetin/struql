@@ -31,8 +31,8 @@ func (s *StruQL) Init(object interface{}) error {
 }
 
 // Where ...
-func (s *StruQL) Where(result RowCollection, filters ...Filter) RowCollection {
-	return s.Rows.Where(result, filters...)
+func (s *StruQL) Where(filters ...Filter) RowCollection {
+	return s.Rows.Where(filters...)
 }
 
 // expandRow ...
@@ -70,24 +70,33 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 				s.object2table(fieldValue.Interface(), objPrefix+reflObjectValue.Type().Field(i).Name)
 			case reflect.Slice:
 				if fieldValue.Len() > 0 {
-					elemKind := fieldValue.Index(0).Kind()
+					fieldsToCopy := make(map[string]*Field)
+					for k, v := range s.Rows[s.currentRow].Fields {
+						fieldsToCopy[k] = v
+					}
 
-					if elemKind == reflect.Struct {
-						fieldsToCopy := make(map[string]*Field)
-						for k, v := range s.Rows[s.currentRow].Fields {
-							fieldsToCopy[k] = v
+					for j := 0; j < fieldValue.Len(); j++ {
+						elem := fieldValue.Index(j)
+						elemKind := elem.Kind()
+
+						if elemKind == reflect.Ptr {
+							elem = reflect.Indirect(elem)
+							elemKind = elem.Kind()
 						}
 
-						for j := 0; j < fieldValue.Len(); j++ {
-							s.object2table(fieldValue.Index(j).Interface(), objPrefix+reflObjectValue.Type().Field(i).Name)
+						if elemKind == reflect.Struct {
+							s.object2table(elem.Interface(), objPrefix+reflObjectValue.Type().Field(i).Name)
 							if j < fieldValue.Len()-1 {
 								s.expandRow(fieldsToCopy)
 							}
+						} else {
+							s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 						}
-					} else {
-						s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 					}
+				} else {
+					s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 				}
+
 			default:
 				s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 			}

@@ -16,7 +16,7 @@ type Santa struct {
 type Origins struct {
 	Code  string
 	Descr string
-	Santa []Santa
+	Santa []*Santa
 }
 
 // Device ...
@@ -41,7 +41,7 @@ func main() {
 			{
 				Code:  "x256",
 				Descr: "Debug",
-				Santa: []Santa{
+				Santa: []*Santa{
 					{ID: 1, Clause: "Hoho"},
 					{ID: 2, Clause: "Tree"},
 					{ID: 3, Clause: "Tree"},
@@ -50,7 +50,7 @@ func main() {
 			{
 				Code:  "x2599",
 				Descr: "Release",
-				Santa: []Santa{
+				Santa: []*Santa{
 					{ID: 1, Clause: "Tooo"},
 					{ID: 2, Clause: "Mooo"},
 					{ID: 3, Clause: "Laaa"},
@@ -68,9 +68,7 @@ func main() {
 		{FieldName: "Oi.Santa.Clause", Value: "Tree"},
 	}
 	fmt.Println("Result: ")
-	result := make(struql.RowCollection, 0, 5)
-
-	sq.Where(result, filter...).Print()
+	sq.Where(filter...).Print()
 
 	fmt.Println("FIN")
 }
