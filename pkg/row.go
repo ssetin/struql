@@ -7,65 +7,62 @@ import (
 
 // Row ...
 type Row struct {
-	Fields map[string]*Field
+	fieldMap  map[string]*Field
+	fieldList []*Field
 }
 
 // RowCollection ...
-type RowCollection []Row
+type RowCollection []*Row
 
 // NewRow ...
-func NewRow() Row {
-	row := Row{}
+func NewRow() *Row {
+	row := &Row{}
 	row.Init()
 	return row
 }
 
 // Init ...
 func (r *Row) Init() {
-	r.Fields = make(map[string]*Field)
-}
-
-// Init ...
-func (r *Row) copyFields(fc map[string]*Field) {
-	r.Fields = make(map[string]*Field)
-	for k, v := range fc {
-		r.Fields[k] = v
-	}
+	r.fieldMap = make(map[string]*Field)
+	r.fieldList = make([]*Field, 0, 2)
 }
 
 // FieldByName ...
 func (r *Row) FieldByName(name string) *Field {
-	if f, ok := r.Fields[name]; ok {
+	if f, ok := r.fieldMap[name]; ok {
 		return f
 	}
 	return nil
 }
 
+// FieldByIndex ...
+func (r *Row) FieldByIndex(index int) *Field {
+	if index > len(r.fieldList) {
+		return nil
+	}
+	return r.fieldList[index]
+}
+
 // AddField ...
 func (r *Row) AddField(name string, value interface{}) {
-	if _, ok := r.Fields[name]; ok {
+	if _, ok := r.fieldMap[name]; ok {
 		return
 	}
 
 	newField := &Field{
+		Name:  name,
 		Value: value,
+		idx:   len(r.fieldList),
 		kind:  reflect.ValueOf(value).Kind(),
 	}
-	r.Fields[name] = newField
+	r.fieldMap[name] = newField
+	r.fieldList = append(r.fieldList, newField)
 }
 
 // PrintValues ...
 func (r *Row) PrintValues() {
-	for fname, f := range r.Fields {
-		fmt.Printf("%s: [%v]\t", fname, f.Value)
-	}
-	fmt.Println("")
-}
-
-// PrintHeaders ...
-func (r *Row) PrintHeaders() {
-	for names := range r.Fields {
-		fmt.Printf("%s\t", names)
+	for _, f := range r.fieldList {
+		fmt.Printf("%s: [%v]\t", f.Name, f.Value)
 	}
 	fmt.Println("")
 }
@@ -81,16 +78,22 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollec
 	)
 	filtersLen = len(filters)
 
+	for idx := 0; idx < len(filters); idx++ {
+		err = filters[idx].Validate(r)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	for _, row := range r {
 		ok = 0
-		for _, filter := range filters {
-			if field = row.FieldByName(filter.FieldName); field != nil {
-				if compareOk, err = field.compare(filter.Value, filter.Operation); compareOk {
-					ok++
-				}
+		for idx := 0; idx < len(filters); idx++ {
+			field = row.FieldByIndex(filters[idx].fieldIndex)
+			if compareOk, err = field.compare(filters[idx].Value, filters[idx].Operation); compareOk {
 				if err != nil {
 					return nil, err
 				}
+				ok++
 			}
 		}
 		if ok == filtersLen {

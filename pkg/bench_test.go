@@ -53,8 +53,8 @@ var (
 		},
 	}
 
-	sq     StruQL
-	filter = []Filter{
+	sq      StruQL
+	filters = []Filter{
 		{FieldName: "Oi.Descr", Value: "Debug"},
 		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparsionBeginWith},
 	}
@@ -86,7 +86,7 @@ func BenchmarkSrtuqSearch(b *testing.B) {
 	result := make(RowCollection, 0, 2)
 
 	for i := 0; i < b.N; i++ {
-		_, _ = sq.Where(result, filter...)
+		_, _ = sq.Where(result, filters...)
 	}
 
 }
@@ -95,10 +95,7 @@ func BenchmarkSrtuqSearch(b *testing.B) {
 // go tool pprof -alloc_objects pkg.test mem.out
 // go tool pprof pkg.test cpu.out
 
-//BenchmarkIterateSearch-2        100000000               10.0 ns/op             0 B/op          0 allocs/op
-//BenchmarkSrtuqSearch-2            2000000                596 ns/op            16 B/op          1 allocs/op
-//BenchmarkSrtuqSearch-2            3000000                607 ns/op            16 B/op          1 allocs/op
-//BenchmarkSrtuqSearch-2            3000000                440 ns/op             0 B/op          0 allocs/op
-
-//BenchmarkIterateSearch-4        100000000               15.4 ns/op             0 B/op          0 allocs/op
-//BenchmarkSrtuqSearch-4            5000000                237 ns/op             0 B/op          0 allocs/op
+//BenchmarkIterateSearch-2        20000000                63.6 ns/op             0 B/op          0 allocs/op
+//BenchmarkSrtuqSearch-2           2000000                 698 ns/op             0 B/op          0 allocs/op
+//BenchmarkSrtuqSearch-2           3000000                 430 ns/op             0 B/op          0 allocs/op
+//BenchmarkSrtuqSearch-2           5000000                 347 ns/op             0 B/op          0 allocs/op

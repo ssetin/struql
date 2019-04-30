@@ -7,21 +7,32 @@ import (
 )
 
 const (
+	// ComparsionEqual - =
 	ComparsionEqual = iota
+	// ComparsionGreater - >
 	ComparsionGreater
+	// ComparsionLesser - <
 	ComparsionLesser
-	// like 'value%'
+	// ComparsionBeginWith - like 'value%'
 	ComparsionBeginWith
-	// like '%value'
+	// ComparsionEndWith - like '%value'
 	ComparsionEndWith
-	// value in[]
+	// ComparsionIn - value in[]
 	ComparsionIn
 )
 
 // Field ...
 type Field struct {
+	Name  string
 	Value interface{}
-	kind  reflect.Kind
+
+	idx  int
+	kind reflect.Kind
+}
+
+// Index returns field index in the row
+func (f *Field) Index() int {
+	return f.idx
 }
 
 func (f *Field) compare(Value interface{}, Operation int) (bool, error) {

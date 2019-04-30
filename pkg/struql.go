@@ -36,10 +36,13 @@ func (s *StruQL) Where(result RowCollection, filters ...Filter) (RowCollection, 
 }
 
 // expandRow ...
-func (s *StruQL) expandRow(fc map[string]*Field) {
-	newRow := NewRow()
-	newRow.copyFields(fc)
-
+func (s *StruQL) copyRow(row Row) {
+	newRow := &Row{}
+	newRow.Init()
+	for _, f := range row.fieldList {
+		newRow.fieldList = append(newRow.fieldList, f)
+		newRow.fieldMap[f.Name] = f
+	}
 	s.Rows = append(s.Rows, newRow)
 	s.currentRow++
 }
@@ -70,10 +73,7 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 				s.object2table(fieldValue.Interface(), objPrefix+reflObjectValue.Type().Field(i).Name)
 			case reflect.Slice:
 				if fieldValue.Len() > 0 {
-					fieldsToCopy := make(map[string]*Field)
-					for k, v := range s.Rows[s.currentRow].Fields {
-						fieldsToCopy[k] = v
-					}
+					rowToCopy := *s.Rows[s.currentRow]
 
 					for j := 0; j < fieldValue.Len(); j++ {
 						elem := fieldValue.Index(j)
@@ -87,7 +87,7 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 						if elemKind == reflect.Struct {
 							s.object2table(elem.Interface(), objPrefix+reflObjectValue.Type().Field(i).Name)
 							if j < fieldValue.Len()-1 {
-								s.expandRow(fieldsToCopy)
+								s.copyRow(rowToCopy)
 							}
 						} else {
 							s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
