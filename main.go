@@ -27,6 +27,10 @@ type Device struct {
 	Oi          []Origins
 }
 
+func Norm(s string) string {
+	return s + "1"
+}
+
 func main() {
 	var sq struql.StruQL
 	dev := Device{
@@ -60,7 +64,7 @@ func main() {
 	sq.Print()
 
 	filter := []struql.Filter{
-		{FieldName: "Oi.Descr", Value: "Debug"},
+		{FieldName: "Oi.Descr", Value: "Debug", Modifier: Norm},
 		{FieldName: "Oi.Santa.Clause", Value: "Tree"},
 	}
 	fmt.Println("Result: ")

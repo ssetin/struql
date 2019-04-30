@@ -74,15 +74,21 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) RowCollect
 		ok         int
 		filtersLen int
 		field      *Field
+		//fieldValue interface{}
 	)
 	filtersLen = len(filters)
 
 	for _, row := range r {
 		ok = 0
 		for _, filter := range filters {
-			field = row.FieldByName(filter.FieldName)
-			if field != nil && field.Value == filter.Value {
-				ok++
+			if field = row.FieldByName(filter.FieldName); field != nil {
+				//fieldValue = field.Value
+				/*if filter.Modifier != nil {
+					fieldValue = filter.Modifier(fieldValue.(string))
+				}*/
+				if field.Value == filter.Value {
+					ok++
+				}
 			}
 		}
 		if ok == filtersLen {

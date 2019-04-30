@@ -98,3 +98,6 @@ func BenchmarkSrtuqSearch(b *testing.B) {
 //BenchmarkSrtuqSearch-2            2000000                596 ns/op            16 B/op          1 allocs/op
 //BenchmarkSrtuqSearch-2            3000000                607 ns/op            16 B/op          1 allocs/op
 //BenchmarkSrtuqSearch-2            3000000                440 ns/op             0 B/op          0 allocs/op
+
+//BenchmarkIterateSearch-4        200000000                7.02 ns/op            0 B/op          0 allocs/op
+//BenchmarkSrtuqSearch-4           10000000                175 ns/op             0 B/op          0 allocs/op
