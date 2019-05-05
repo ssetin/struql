@@ -14,6 +14,7 @@ type Filter struct {
 
 	// fieldIndex - to improve performance
 	fieldIndex int
+	valStr     string
 	validated  bool
 }
 

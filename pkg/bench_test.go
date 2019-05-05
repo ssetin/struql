@@ -55,10 +55,14 @@ var (
 
 	sq      StruQL
 	filters = []Filter{
-		{FieldName: "Oi.Descr", Value: "Debug"},
+		{FieldName: "Oi.Descr", Value: "debug", Modifier: ModMe},
 		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparsionBeginWith},
 	}
 )
+
+func ModMe(s string) string {
+	return strings.ToLower(s)
+}
 
 func init() {
 	sq.Init(dev)
@@ -69,7 +73,7 @@ func BenchmarkIterateSearch(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		for _, ois := range dev.Oi {
-			if ois.Descr == "Debug" {
+			if ModMe(ois.Descr) == "debug" {
 				for _, snts := range ois.Santa {
 					if strings.HasPrefix(snts.Clause, "Tre") {
 						_ = snts.ID
@@ -78,7 +82,6 @@ func BenchmarkIterateSearch(b *testing.B) {
 			}
 		}
 	}
-
 }
 
 // BenchmarkSrtuqSearch ...
@@ -95,7 +98,5 @@ func BenchmarkSrtuqSearch(b *testing.B) {
 // go tool pprof -alloc_objects pkg.test mem.out
 // go tool pprof pkg.test cpu.out
 
-//BenchmarkIterateSearch-2        20000000                63.6 ns/op             0 B/op          0 allocs/op
-//BenchmarkSrtuqSearch-2           2000000                 698 ns/op             0 B/op          0 allocs/op
-//BenchmarkSrtuqSearch-2           3000000                 430 ns/op             0 B/op          0 allocs/op
-//BenchmarkSrtuqSearch-2           5000000                 347 ns/op             0 B/op          0 allocs/op
+//BenchmarkIterateSearch-2         5000000               273 ns/op              32 B/op          4 allocs/op
+//BenchmarkSrtuqSearch-2           1000000              1021 ns/op              80 B/op         12 allocs/op

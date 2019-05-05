@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	struql "github.com/ssetin/struql/pkg"
 )
@@ -28,8 +29,8 @@ type Device struct {
 	Oi          []Origins
 }
 
-func Norm(s string) string {
-	return s + "1"
+func modMe(s string) string {
+	return strings.ToLower(s)
 }
 
 func main() {
@@ -71,7 +72,7 @@ func main() {
 	sq.Print()
 
 	filter := []struql.Filter{
-		{FieldName: "Oi.Descr", Value: "Debug"},
+		{FieldName: "Oi.Descr", Value: "debug", Modifier: modMe},
 		{FieldName: "Oi.Santa.Clause", Value: "ree", Operation: struql.ComparsionEndWith},
 		{FieldName: "Oi.Collection", Value: int32(100), Operation: struql.ComparsionIn},
 		{FieldName: "Number", Value: 500, Operation: struql.ComparsionLesser},

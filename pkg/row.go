@@ -89,7 +89,7 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollec
 		ok = 0
 		for idx := 0; idx < len(filters); idx++ {
 			field = row.FieldByIndex(filters[idx].fieldIndex)
-			if compareOk, err = field.compare(filters[idx].Value, filters[idx].Operation); compareOk {
+			if compareOk, err = field.compare(&filters[idx]); compareOk {
 				if err != nil {
 					return nil, err
 				}
