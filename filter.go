@@ -1,16 +1,18 @@
 package struql
 
-import "errors"
+import (
+	"errors"
+)
 
-// StringModifier - callback for transforming field value before compare
-type StringModifier func(Value string) string
+// ValueModifier - callback for transforming field value before compare
+type ValueModifier func(Value interface{}) interface{}
 
 // Filter ...
 type Filter struct {
 	FieldName string
 	Value     interface{}
 	Operation int
-	Modifier  StringModifier
+	Modifier  ValueModifier
 
 	// fieldIndex - to improve performance
 	fieldIndex int

@@ -55,13 +55,13 @@ var (
 
 	sq      StruQL
 	filters = []Filter{
-		{FieldName: "Oi.Descr", Value: "debug", Modifier: ModMe},
+		{FieldName: "Oi.Descr", Value: "Debug", Modifier: modMe},
 		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparsionBeginWith},
 	}
 )
 
-func ModMe(s string) string {
-	return strings.ToLower(s)
+func modMe(s interface{}) interface{} {
+	return strings.ToLower(s.(string))
 }
 
 func init() {
@@ -73,7 +73,7 @@ func BenchmarkIterateSearch(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		for _, ois := range dev.Oi {
-			if ModMe(ois.Descr) == "debug" {
+			if modMe(ois.Descr) == "debug" {
 				for _, snts := range ois.Santa {
 					if strings.HasPrefix(snts.Clause, "Tre") {
 						_ = snts.ID

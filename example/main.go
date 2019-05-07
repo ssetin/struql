@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	struql "github.com/ssetin/struql/pkg"
+	"github.com/ssetin/struql"
 )
 
 // Santa ...
@@ -29,8 +29,12 @@ type Device struct {
 	Oi          []Origins
 }
 
-func modMe(s string) string {
-	return strings.ToLower(s)
+func modMe(s interface{}) interface{} {
+	return strings.ToLower(s.(string))
+}
+
+func modMeInt(s interface{}) interface{} {
+	return s.(int) + 1
 }
 
 func main() {
@@ -72,10 +76,10 @@ func main() {
 	sq.Print()
 
 	filter := []struql.Filter{
-		{FieldName: "Oi.Descr", Value: "debug", Modifier: modMe},
+		{FieldName: "Oi.Descr", Value: modMe("debUg"), Modifier: modMe},
 		{FieldName: "Oi.Santa.Clause", Value: "ree", Operation: struql.ComparsionEndWith},
 		{FieldName: "Oi.Collection", Value: int32(100), Operation: struql.ComparsionIn},
-		{FieldName: "Number", Value: 500, Operation: struql.ComparsionLesser},
+		{FieldName: "Number", Value: 500, Operation: struql.ComparsionLesser, Modifier: modMeInt},
 	}
 	fmt.Println("Result: ")
 	dataSet := make(struql.RowCollection, 0, 5)

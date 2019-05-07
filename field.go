@@ -35,19 +35,16 @@ func (f *Field) Index() int {
 	return f.idx
 }
 
-func (f *Field) modified(mod StringModifier) string {
+func (f *Field) passModifier(mod ValueModifier) interface{} {
 	if mod != nil {
-		return mod(f.Value.(string))
+		return mod(f.Value)
 	}
-	return f.Value.(string)
+	return f.Value
 }
 
 func (f *Field) compare(filter *Filter) (bool, error) {
 	if filter.Operation == ComparsionEqual {
-		if f.kind == reflect.String {
-			return f.modified(filter.Modifier) == filter.Value.(string), nil
-		}
-		return f.Value == filter.Value, nil
+		return f.passModifier(filter.Modifier) == filter.Value, nil
 	}
 
 	switch filter.Operation {
@@ -55,17 +52,17 @@ func (f *Field) compare(filter *Filter) (bool, error) {
 	case ComparsionGreater:
 		switch f.kind {
 		case reflect.String:
-			return f.modified(filter.Modifier) > filter.Value.(string), nil
+			return f.passModifier(filter.Modifier).(string) > filter.Value.(string), nil
 		case reflect.Int:
-			return f.Value.(int) > filter.Value.(int), nil
+			return f.passModifier(filter.Modifier).(int) > filter.Value.(int), nil
 		case reflect.Float32:
-			return f.Value.(float32) > filter.Value.(float32), nil
+			return f.passModifier(filter.Modifier).(float32) > filter.Value.(float32), nil
 		case reflect.Float64:
-			return f.Value.(float64) > filter.Value.(float64), nil
+			return f.passModifier(filter.Modifier).(float64) > filter.Value.(float64), nil
 		case reflect.Int32:
-			return f.Value.(int32) > filter.Value.(int32), nil
+			return f.passModifier(filter.Modifier).(int32) > filter.Value.(int32), nil
 		case reflect.Int64:
-			return f.Value.(int64) > filter.Value.(int64), nil
+			return f.passModifier(filter.Modifier).(int64) > filter.Value.(int64), nil
 		default:
 			return false, errors.New("unsupported comparsion")
 		}
@@ -73,17 +70,17 @@ func (f *Field) compare(filter *Filter) (bool, error) {
 	case ComparsionLesser:
 		switch f.kind {
 		case reflect.String:
-			return f.modified(filter.Modifier) < filter.Value.(string), nil
+			return f.passModifier(filter.Modifier).(string) < filter.Value.(string), nil
 		case reflect.Int:
-			return f.Value.(int) < filter.Value.(int), nil
+			return f.passModifier(filter.Modifier).(int) < filter.Value.(int), nil
 		case reflect.Float32:
-			return f.Value.(float32) < filter.Value.(float32), nil
+			return f.passModifier(filter.Modifier).(float32) < filter.Value.(float32), nil
 		case reflect.Float64:
-			return f.Value.(float64) < filter.Value.(float64), nil
+			return f.passModifier(filter.Modifier).(float64) < filter.Value.(float64), nil
 		case reflect.Int32:
-			return f.Value.(int32) < filter.Value.(int32), nil
+			return f.passModifier(filter.Modifier).(int32) < filter.Value.(int32), nil
 		case reflect.Int64:
-			return f.Value.(int64) < filter.Value.(int64), nil
+			return f.passModifier(filter.Modifier).(int64) < filter.Value.(int64), nil
 		default:
 			return false, errors.New("unsupported comparsion")
 		}
@@ -91,7 +88,7 @@ func (f *Field) compare(filter *Filter) (bool, error) {
 	case ComparsionBeginWith:
 		switch f.kind {
 		case reflect.String:
-			return strings.HasPrefix(f.modified(filter.Modifier), filter.Value.(string)), nil
+			return strings.HasPrefix(f.passModifier(filter.Modifier).(string), filter.Value.(string)), nil
 		default:
 			return false, errors.New("unsupported comparsion")
 		}
@@ -99,7 +96,7 @@ func (f *Field) compare(filter *Filter) (bool, error) {
 	case ComparsionEndWith:
 		switch f.kind {
 		case reflect.String:
-			return strings.HasSuffix(f.modified(filter.Modifier), filter.Value.(string)), nil
+			return strings.HasSuffix(f.passModifier(filter.Modifier).(string), filter.Value.(string)), nil
 		default:
 			return false, errors.New("unsupported comparsion")
 		}
