@@ -99,7 +99,6 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 				s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 			}
 		}
-	default:
 	}
 
 	return nil
