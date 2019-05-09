@@ -89,8 +89,8 @@ func main() {
 
 	filter := []struql.Filter{
 		{FieldName: "Oi.Descr", Value: modMe("debUg"), Modifier: modMe},
-		{FieldName: "Oi.Santa.Clause", Value: "ree", Operation: struql.ComparsionEndWith},
-		{FieldName: "Number", Value: 500, Operation: struql.ComparsionLesser, Modifier: modMeInt},
+		{FieldName: "Oi.Santa.Clause", Value: "ree", Operation: struql.ComparisonEndWith},
+		{FieldName: "Number", Value: 500, Operation: struql.ComparisonLesser, Modifier: modMeInt},
 	}
 	fmt.Println("Result: ")
 	dataSet := make(struql.RowCollection, 0, 5)

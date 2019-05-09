@@ -1,16 +1,18 @@
-struql
-=============================================
+# struql
+
+
+[![Build Status](https://travis-ci.org/ssetin/struql.svg?branch=master)](https://travis-ci.org/ssetin/struql)
+[![Coverage Status](https://coveralls.io/repos/github/ssetin/struql/badge.svg?branch=master)](https://coveralls.io/github/ssetin/struql?branch=master)
+
 Allows to filter data in the structure, presenting it as a table.
 All fields should be exported, all filters values should be converted to appropriate field types.
 
-Install
--------
+## Install
 ```
 go get github.com/ssetin/struql
 ```
 
-Using
------
+## Using
 Lets consider you have such struct:
 
 ```go
@@ -49,7 +51,7 @@ So now you can filter that data like this:
 		{FieldName: "Details.Id", Value: int32(1), Operation: struql.ComparsionGreater},
 		{FieldName: "Details.Value", Value: "S", Operation: struql.ComparsionBeginWith},
 	}
-	dataSet := make(struql.RowCollection)
+	dataSet := make(struql.RowCollection, 1)
 	dataSet, _ = sq.Where(dataSet, filter...)
 
 	values, _ := dataSet.CollectValues("Details.Id")

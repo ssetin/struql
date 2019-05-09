@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	errEmptyDataSet = "empty dataset"
-	errNoSuchField  = "no such field in dataset"
+	errEmptyDataSet       = "empty dataset"
+	errNoSuchField        = "no such field in dataset"
+	errUnsuppotredCompare = "unsupported comparison"
 )
 
 // Row ...

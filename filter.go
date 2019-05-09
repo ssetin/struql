@@ -5,18 +5,18 @@ import (
 )
 
 const (
-	// ComparsionEqual - =
-	ComparsionEqual = iota
-	// ComparsionGreater - >
-	ComparsionGreater
-	// ComparsionLesser - <
-	ComparsionLesser
-	// ComparsionBeginWith - like 'value%'
-	ComparsionBeginWith
-	// ComparsionEndWith - like '%value'
-	ComparsionEndWith
-	// ComparsionIn - value in[]
-	ComparsionIn
+	// ComparisonEqual - =
+	ComparisonEqual = iota
+	// ComparisonGreater - >
+	ComparisonGreater
+	// ComparisonLesser - <
+	ComparisonLesser
+	// ComparisonBeginWith - like 'value%'
+	ComparisonBeginWith
+	// ComparisonEndWith - like '%value'
+	ComparisonEndWith
+	// ComparisonIn - value in[]
+	ComparisonIn
 )
 
 // ValueModifier - callback for transforming field value before compare

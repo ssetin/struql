@@ -25,7 +25,7 @@ func BenchmarkIterateSearch(b *testing.B) {
 func BenchmarkSrtuqSearch(b *testing.B) {
 	filters := []Filter{
 		{FieldName: "Oi.Descr", Value: "Debug"},
-		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparsionBeginWith},
+		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparisonBeginWith},
 	}
 	result := make(RowCollection, 0, 2)
 
@@ -52,7 +52,7 @@ func BenchmarkIterateSearchWithModifier(b *testing.B) {
 func BenchmarkSrtuqSearchWithModifier(b *testing.B) {
 	filters := []Filter{
 		{FieldName: "Oi.Descr", Value: "debug", Modifier: modMe},
-		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparsionBeginWith},
+		{FieldName: "Oi.Santa.Clause", Value: "Tre", Operation: ComparisonBeginWith},
 	}
 	result := make(RowCollection, 0, 2)
 

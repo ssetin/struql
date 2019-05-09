@@ -209,7 +209,7 @@ func TestQuering(t *testing.T) {
 			caseName: "1. Simple filter",
 			filter: []Filter{
 				{FieldName: "Oi.Descr", Value: "Debug"},
-				{FieldName: "Oi.Santa.ID", Value: 1, Operation: ComparsionGreater},
+				{FieldName: "Oi.Santa.ID", Value: 1, Operation: ComparisonGreater},
 				{FieldName: "Oi.Santa.Clause", Value: "Tree"},
 			},
 			values: fieldValues{
@@ -221,7 +221,7 @@ func TestQuering(t *testing.T) {
 			caseName: "2. String begin with + modifier",
 			filter: []Filter{
 				{FieldName: "Oi.Code", Value: "x25990"},
-				{FieldName: "Oi.Santa.Clause", Value: "tree", Modifier: modMe, Operation: ComparsionBeginWith},
+				{FieldName: "Oi.Santa.Clause", Value: "tree", Modifier: modMe, Operation: ComparisonBeginWith},
 			},
 			values: fieldValues{
 				fieldName: "Oi.Santa.ID",
@@ -231,9 +231,9 @@ func TestQuering(t *testing.T) {
 		{
 			caseName: "3. Int32, lesser, exists in slice",
 			filter: []Filter{
-				{FieldName: "Oi.ID", Value: int32(200), Operation: ComparsionLesser},
-				{FieldName: "Version", Value: float32(3.78), Operation: ComparsionEqual},
-				{FieldName: "Oi.Santa.Chain", Value: 39, Operation: ComparsionIn},
+				{FieldName: "Oi.ID", Value: int32(200), Operation: ComparisonLesser},
+				{FieldName: "Version", Value: float32(3.78), Operation: ComparisonEqual},
+				{FieldName: "Oi.Santa.Chain", Value: 39, Operation: ComparisonIn},
 			},
 			values: fieldValues{
 				fieldName: "Oi.Santa.ID",
@@ -243,11 +243,11 @@ func TestQuering(t *testing.T) {
 		{
 			caseName: "4. String end with, int32 greater, string lesser, string end with, float32 greater",
 			filter: []Filter{
-				{FieldName: "Oi.ID", Value: int32(100), Operation: ComparsionGreater},
-				{FieldName: "Version", Value: float32(1), Operation: ComparsionGreater},
-				{FieldName: "Oi.Santa.Clause", Value: "ic", Operation: ComparsionEndWith},
-				{FieldName: "Oi.Descr", Value: "ZZZZZZZZ", Operation: ComparsionLesser},
-				{FieldName: "Oi.Descr", Value: "Ab", Operation: ComparsionGreater},
+				{FieldName: "Oi.ID", Value: int32(100), Operation: ComparisonGreater},
+				{FieldName: "Version", Value: float32(1), Operation: ComparisonGreater},
+				{FieldName: "Oi.Santa.Clause", Value: "ic", Operation: ComparisonEndWith},
+				{FieldName: "Oi.Descr", Value: "ZZZZZZZZ", Operation: ComparisonLesser},
+				{FieldName: "Oi.Descr", Value: "Ab", Operation: ComparisonGreater},
 			},
 			values: fieldValues{
 				fieldName: "Oi.Santa.ID",
@@ -255,49 +255,49 @@ func TestQuering(t *testing.T) {
 			},
 		},
 		{
-			caseName: "5. Unsupported comparsion 1",
+			caseName: "5. Unsupported Comparison 1",
 			filter: []Filter{
-				{FieldName: "Number", Value: 1, Operation: ComparsionEndWith},
+				{FieldName: "Number", Value: 1, Operation: ComparisonEndWith},
 			},
-			err: errors.New("unsupported comparsion"),
+			err: errors.New("unsupported comparison"),
 		},
 		{
-			caseName: "6. Unsupported comparsion 2",
+			caseName: "6. Unsupported Comparison 2",
 			filter: []Filter{
-				{FieldName: "Number", Value: 1, Operation: ComparsionBeginWith},
+				{FieldName: "Number", Value: 1, Operation: ComparisonBeginWith},
 			},
-			err: errors.New("unsupported comparsion"),
+			err: errors.New("unsupported comparison"),
 		},
 		{
-			caseName: "7. Unsupported comparsion 3",
+			caseName: "7. Unsupported Comparison 3",
 			filter: []Filter{
-				{FieldName: "SomeByte", Value: 1, Operation: ComparsionGreater},
+				{FieldName: "SomeByte", Value: 1, Operation: ComparisonGreater},
 			},
-			err: errors.New("unsupported comparsion"),
+			err: errors.New("unsupported comparison"),
 		},
 		{
-			caseName: "8. Unsupported comparsion 4",
+			caseName: "8. Unsupported Comparison 4",
 			filter: []Filter{
-				{FieldName: "SomeByte", Value: 1, Operation: ComparsionLesser},
+				{FieldName: "SomeByte", Value: 1, Operation: ComparisonLesser},
 			},
-			err: errors.New("unsupported comparsion"),
+			err: errors.New("unsupported comparison"),
 		},
 		{
-			caseName: "9. Unsupported comparsion 5",
+			caseName: "9. Unsupported Comparison 5",
 			filter: []Filter{
-				{FieldName: "Number", Value: 1, Operation: ComparsionIn},
+				{FieldName: "Number", Value: 1, Operation: ComparisonIn},
 			},
-			err: errors.New("unsupported comparsion"),
+			err: errors.New("unsupported comparison"),
 		},
 		{
 			caseName: "10. Another filters",
 			filter: []Filter{
-				{FieldName: "Oi.Santa.ID", Value: 20, Operation: ComparsionLesser},
-				{FieldName: "Version", Value: float32(9), Operation: ComparsionLesser},
-				{FieldName: "Oi.Custom.MaskF64", Value: float64(2012.33), Operation: ComparsionLesser},
-				{FieldName: "Oi.Custom.MaskF64", Value: float64(12.3), Operation: ComparsionGreater},
-				{FieldName: "Oi.Custom.MaskI64", Value: int64(-454), Operation: ComparsionGreater},
-				{FieldName: "Oi.Custom.MaskI64", Value: int64(900), Operation: ComparsionLesser},
+				{FieldName: "Oi.Santa.ID", Value: 20, Operation: ComparisonLesser},
+				{FieldName: "Version", Value: float32(9), Operation: ComparisonLesser},
+				{FieldName: "Oi.Custom.MaskF64", Value: float64(2012.33), Operation: ComparisonLesser},
+				{FieldName: "Oi.Custom.MaskF64", Value: float64(12.3), Operation: ComparisonGreater},
+				{FieldName: "Oi.Custom.MaskI64", Value: int64(-454), Operation: ComparisonGreater},
+				{FieldName: "Oi.Custom.MaskI64", Value: int64(900), Operation: ComparisonLesser},
 			},
 			values: fieldValues{
 				fieldName: "Oi.Santa.ID",
