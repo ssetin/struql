@@ -290,7 +290,14 @@ func TestQuering(t *testing.T) {
 			err: errors.New("unsupported comparison"),
 		},
 		{
-			caseName: "10. Another filters",
+			caseName: "10. Unsupported Comparison 6",
+			filter: []Filter{
+				{FieldName: "Number", Value: 1, Operation: 99},
+			},
+			err: errors.New("unsupported comparison"),
+		},
+		{
+			caseName: "11. Another filters",
 			filter: []Filter{
 				{FieldName: "Oi.Santa.ID", Value: 20, Operation: ComparisonLesser},
 				{FieldName: "Version", Value: float32(9), Operation: ComparisonLesser},

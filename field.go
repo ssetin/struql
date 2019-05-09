@@ -110,5 +110,5 @@ func (f Field) compare(filter *Filter) (bool, error) {
 	case ComparisonIn:
 		return f.compareIn(filter)
 	}
-	return false, nil
+	return false, errors.New(errUnsuppotredCompare)
 }

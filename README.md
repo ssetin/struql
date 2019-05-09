@@ -48,8 +48,8 @@ struql represents it as a such table:
 So now you can filter that data like this:
 ```go
 	filter := []struql.Filter{
-		{FieldName: "Details.Id", Value: int32(1), Operation: struql.ComparsionGreater},
-		{FieldName: "Details.Value", Value: "S", Operation: struql.ComparsionBeginWith},
+		{FieldName: "Details.Id", Value: int32(1), Operation: struql.ComparisonGreater},
+		{FieldName: "Details.Value", Value: "S", Operation: struql.ComparisonBeginWith},
 	}
 	dataSet := make(struql.RowCollection, 1)
 	dataSet, _ = sq.Where(dataSet, filter...)
