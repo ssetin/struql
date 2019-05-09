@@ -4,6 +4,21 @@ import (
 	"errors"
 )
 
+const (
+	// ComparsionEqual - =
+	ComparsionEqual = iota
+	// ComparsionGreater - >
+	ComparsionGreater
+	// ComparsionLesser - <
+	ComparsionLesser
+	// ComparsionBeginWith - like 'value%'
+	ComparsionBeginWith
+	// ComparsionEndWith - like '%value'
+	ComparsionEndWith
+	// ComparsionIn - value in[]
+	ComparsionIn
+)
+
 // ValueModifier - callback for transforming field value before compare
 type ValueModifier func(Value interface{}) interface{}
 
@@ -16,14 +31,14 @@ type Filter struct {
 
 	// fieldIndex - to improve performance
 	fieldIndex int
-	validated  bool
+	//validated  bool
 }
 
 // Validate check field and get fieldIndex from row
 func (f *Filter) Validate(r RowCollection) error {
-	if f.validated {
-		return nil
-	}
+	//if f.validated {
+	//	return nil
+	//}
 	if len(r) == 0 {
 		return errors.New("empty dataset")
 	}
@@ -32,6 +47,6 @@ func (f *Filter) Validate(r RowCollection) error {
 		return errors.New("no such field in dataset")
 	}
 	f.fieldIndex = field.Index()
-	f.validated = true
+	//f.validated = true
 	return nil
 }

@@ -6,21 +6,6 @@ import (
 	"strings"
 )
 
-const (
-	// ComparsionEqual - =
-	ComparsionEqual = iota
-	// ComparsionGreater - >
-	ComparsionGreater
-	// ComparsionLesser - <
-	ComparsionLesser
-	// ComparsionBeginWith - like 'value%'
-	ComparsionBeginWith
-	// ComparsionEndWith - like '%value'
-	ComparsionEndWith
-	// ComparsionIn - value in[]
-	ComparsionIn
-)
-
 // Field ...
 type Field struct {
 	Name  string
@@ -43,12 +28,10 @@ func (f *Field) passModifier(mod ValueModifier) interface{} {
 }
 
 func (f *Field) compare(filter *Filter) (bool, error) {
-	if filter.Operation == ComparsionEqual {
-		return f.passModifier(filter.Modifier) == filter.Value, nil
-	}
 
 	switch filter.Operation {
-
+	case ComparsionEqual:
+		return f.passModifier(filter.Modifier) == filter.Value, nil
 	case ComparsionGreater:
 		switch f.kind {
 		case reflect.String:

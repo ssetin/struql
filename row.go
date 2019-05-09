@@ -1,8 +1,14 @@
 package struql
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
+)
+
+const (
+	errEmptyDataSet = "empty dataset"
+	errNoSuchField  = "no such field in dataset"
 )
 
 // Row ...
@@ -59,14 +65,6 @@ func (r *Row) AddField(name string, value interface{}) {
 	r.fieldList = append(r.fieldList, newField)
 }
 
-// PrintValues ...
-func (r *Row) PrintValues() {
-	for _, f := range r.fieldList {
-		fmt.Printf("%s: [%v]\t", f.Name, f.Value)
-	}
-	fmt.Println("")
-}
-
 // Where ...
 func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollection, error) {
 	var (
@@ -89,11 +87,12 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollec
 		ok = 0
 		for idx := 0; idx < len(filters); idx++ {
 			field = row.FieldByIndex(filters[idx].fieldIndex)
-			if compareOk, err = field.compare(&filters[idx]); compareOk {
-				if err != nil {
-					return nil, err
+			if compareOk, err = field.compare(&filters[idx]); err == nil {
+				if compareOk {
+					ok++
 				}
-				ok++
+			} else {
+				return nil, err
 			}
 		}
 		if ok == filtersLen {
@@ -110,9 +109,52 @@ func (r RowCollection) AddField(name string, value interface{}) {
 	}
 }
 
-// Print ...
-func (r RowCollection) Print() {
-	for _, row := range r {
-		row.PrintValues()
+// FieldIndex returns field index in row collection
+func (r RowCollection) fieldIndex(fieldName string) (int, error) {
+	if len(r) == 0 {
+		return -1, errors.New(errEmptyDataSet)
 	}
+	fld := r[0].FieldByName(fieldName)
+	if fld == nil {
+		return -1, errors.New(errNoSuchField)
+	}
+	return fld.Index(), nil
+}
+
+// CollectValues returns array of values of according field
+func (r RowCollection) CollectValues(fieldName string) ([]interface{}, error) {
+	idx, err := r.fieldIndex(fieldName)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]interface{}, len(r))
+
+	for i := 0; i < len(r); i++ {
+		result[i] = r[i].FieldByIndex(idx).Value
+	}
+	return result, nil
+}
+
+// TODO: Select returns new row collection with specified fields
+//func (r RowCollection) Select(fieldName ...string) RowCollection {
+//	result := make(RowCollection, len(r))
+//	return result
+//}
+
+// String ...
+func (r RowCollection) String() string {
+	var result string
+	for i := 0; i < len(r); i++ {
+		result += r[i].String() + "\n"
+	}
+	return result
+}
+
+// String ...
+func (r Row) String() string {
+	var result string
+	for i := 0; i < len(r.fieldList); i++ {
+		result += fmt.Sprintf("%s: [%v]\t", r.fieldList[i].Name, r.fieldList[i].Value)
+	}
+	return result
 }

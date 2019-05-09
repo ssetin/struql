@@ -48,10 +48,8 @@ func (s *StruQL) copyRow(row Row) {
 }
 
 // Print ...
-func (s *StruQL) Print() {
-	for _, row := range s.Rows {
-		row.PrintValues()
-	}
+func (s StruQL) String() string {
+	return s.Rows.String()
 }
 
 func (s *StruQL) object2table(object interface{}, prefix ...string) error {

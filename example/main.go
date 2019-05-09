@@ -7,26 +7,22 @@ import (
 	"github.com/ssetin/struql"
 )
 
-// Santa ...
-type Santa struct {
+type santa struct {
 	ID     int
 	Clause string
 }
 
-// Origins ...
-type Origins struct {
-	Code       string
-	Descr      string
-	Santa      []*Santa
-	Collection []int32
+type origins struct {
+	Code  string
+	Descr string
+	Santa []santa
 }
 
-// Device ...
-type Device struct {
+type device struct {
 	Number      int
 	Model       string
 	Manufacture string
-	Oi          []Origins
+	Oi          []origins
 }
 
 func modMe(s interface{}) interface{} {
@@ -43,29 +39,45 @@ func main() {
 		err error
 	)
 
-	dev := Device{
+	dev := device{
 		Number:      99,
 		Model:       "JFQ",
 		Manufacture: "Factory",
-		Oi: []Origins{
+		Oi: []origins{
 			{
-				Code:       "x256",
-				Descr:      "Debug",
-				Collection: []int32{1, 6, 99, 100, 11},
-				Santa: []*Santa{
+				Code:  "x256",
+				Descr: "Debug",
+				Santa: []santa{
 					{ID: 1, Clause: "Hoho"},
 					{ID: 2, Clause: "Tree"},
 					{ID: 3, Clause: "Tree"},
 				},
 			},
 			{
-				Code:       "x2599",
-				Descr:      "Release",
-				Collection: []int32{101, 102, 103},
-				Santa: []*Santa{
+				Code:  "x2599",
+				Descr: "Release",
+				Santa: []santa{
 					{ID: 1, Clause: "Tooo"},
 					{ID: 2, Clause: "Mooo"},
 					{ID: 3, Clause: "Laaa"},
+					{ID: 4, Clause: "Qwerty"},
+				},
+			},
+			{
+				Code:  "x25990",
+				Descr: "Profile",
+				Santa: []santa{
+					{ID: 1, Clause: "Moose"},
+					{ID: 2, Clause: "Fox"},
+					{ID: 3, Clause: "Black"},
+					{ID: 4, Clause: "Baltic"},
+					{ID: 5, Clause: "Pacific"},
+					{ID: 6, Clause: "Rocky Mountains"},
+					{ID: 7, Clause: "Spotlight"},
+					{ID: 8, Clause: "Cortina"},
+					{ID: 9, Clause: "TreeTree"},
+					{ID: 10, Clause: "Tiger"},
+					{ID: 11, Clause: "Tree"},
 				},
 			},
 		},
@@ -73,12 +85,11 @@ func main() {
 
 	sq.Init(dev)
 
-	sq.Print()
+	fmt.Println(sq)
 
 	filter := []struql.Filter{
 		{FieldName: "Oi.Descr", Value: modMe("debUg"), Modifier: modMe},
 		{FieldName: "Oi.Santa.Clause", Value: "ree", Operation: struql.ComparsionEndWith},
-		{FieldName: "Oi.Collection", Value: int32(100), Operation: struql.ComparsionIn},
 		{FieldName: "Number", Value: 500, Operation: struql.ComparsionLesser, Modifier: modMeInt},
 	}
 	fmt.Println("Result: ")
@@ -90,7 +101,8 @@ func main() {
 		return
 	}
 
-	dataSet.Print()
+	vals, _ := dataSet.CollectValues("Oi.Santa.ID")
+	fmt.Printf("Oi.Santa.ID: %v\n", vals)
 
 	fmt.Println("FIN")
 }

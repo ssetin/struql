@@ -4,6 +4,7 @@ main
 *.out
 *.test
 *.pdf
+*.html
 *.svg
 *DS_Store
 ue_*
