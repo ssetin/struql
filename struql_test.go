@@ -28,12 +28,13 @@ type origins struct {
 }
 
 type device struct {
-	Number      int
-	Model       string
-	Version     float32
-	Manufacture string
-	Oi          []origins
-	SomeByte    byte
+	Number          int
+	Model           string
+	Version         float32
+	Manufacture     string
+	Oi              []origins
+	SomeByte        byte
+	unExportedField int
 }
 
 var (

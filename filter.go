@@ -22,7 +22,7 @@ const (
 // ValueModifier - callback for transforming field value before compare
 type ValueModifier func(Value interface{}) interface{}
 
-// Filter ...
+// Filter sets the search condition
 type Filter struct {
 	FieldName string
 	Value     interface{}
@@ -31,14 +31,10 @@ type Filter struct {
 
 	// fieldIndex - to improve performance
 	fieldIndex int
-	//validated  bool
 }
 
 // Validate check field and get fieldIndex from row
 func (f *Filter) Validate(r RowCollection) error {
-	//if f.validated {
-	//	return nil
-	//}
 	if len(r) == 0 {
 		return errors.New("empty dataset")
 	}
@@ -47,6 +43,5 @@ func (f *Filter) Validate(r RowCollection) error {
 		return errors.New("no such field in dataset")
 	}
 	f.fieldIndex = field.Index()
-	//f.validated = true
 	return nil
 }

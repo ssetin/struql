@@ -12,29 +12,29 @@ const (
 	errUnsuppotredCompare = "unsupported comparison"
 )
 
-// Row ...
+// Row - collection of fields / table row
 type Row struct {
 	fieldMap  map[string]*Field
 	fieldList []*Field
 }
 
-// RowCollection ...
+// RowCollection - collection of rows / table
 type RowCollection []*Row
 
-// NewRow ...
+// NewRow creates new initialized row
 func NewRow() *Row {
 	row := &Row{}
 	row.Init()
 	return row
 }
 
-// Init ...
+// Init initializes row, allocating memory for fields
 func (r *Row) Init() {
 	r.fieldMap = make(map[string]*Field)
 	r.fieldList = make([]*Field, 0, 2)
 }
 
-// FieldByName ...
+// FieldByName returns field by it's name or nil
 func (r *Row) FieldByName(name string) *Field {
 	if f, ok := r.fieldMap[name]; ok {
 		return f
@@ -42,7 +42,7 @@ func (r *Row) FieldByName(name string) *Field {
 	return nil
 }
 
-// FieldByIndex ...
+// FieldByIndex returns field by it's index or nil
 func (r *Row) FieldByIndex(index int) *Field {
 	if index > len(r.fieldList) {
 		return nil
@@ -50,7 +50,7 @@ func (r *Row) FieldByIndex(index int) *Field {
 	return r.fieldList[index]
 }
 
-// AddField ...
+// AddField add new field to row
 func (r *Row) AddField(name string, value interface{}) {
 	if _, ok := r.fieldMap[name]; ok {
 		return
@@ -66,7 +66,7 @@ func (r *Row) AddField(name string, value interface{}) {
 	r.fieldList = append(r.fieldList, newField)
 }
 
-// Where ...
+// Where collects data in the rows according to filters
 func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollection, error) {
 	var (
 		ok         int
@@ -103,7 +103,7 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollec
 	return result, nil
 }
 
-// AddField ...
+// AddField add field to all rows
 func (r RowCollection) AddField(name string, value interface{}) {
 	for _, row := range r {
 		row.AddField(name, value)
@@ -142,7 +142,7 @@ func (r RowCollection) CollectValues(fieldName string) ([]interface{}, error) {
 //	return result
 //}
 
-// String ...
+// String represents rows as string
 func (r RowCollection) String() string {
 	var result string
 	for i := 0; i < len(r); i++ {
@@ -151,7 +151,7 @@ func (r RowCollection) String() string {
 	return result
 }
 
-// String ...
+// String represents row as string
 func (r Row) String() string {
 	var result string
 	for i := 0; i < len(r.fieldList); i++ {

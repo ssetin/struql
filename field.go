@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Field ...
+// Field represents struct field in the table
 type Field struct {
 	Name  string
 	Value interface{}

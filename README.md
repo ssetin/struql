@@ -1,11 +1,12 @@
 # struql
 
+[![GoDoc](https://godoc.org/github.com/ssetin/struql?status.svg)](https://godoc.org/github.com/ssetin/struql)
 [![Build Status](https://travis-ci.org/ssetin/struql.svg?branch=master)](https://travis-ci.org/ssetin/struql)
 [![Coverage Status](https://coveralls.io/repos/github/ssetin/struql/badge.svg?branch=master)](https://coveralls.io/github/ssetin/struql?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ssetin/struql)](https://goreportcard.com/report/github.com/ssetin/struql)
 
 Allows to filter data in the structure, presenting it as a table.
-All fields should be exported, all filters values should be converted to appropriate field types.
+Note, that all filters values should be converted to appropriate field types.
 
 ## Install
 ```
@@ -37,7 +38,7 @@ var dev = device{
 	},
 }
 ```
-struql represents it as a such table:
+struql represents it as table:
 
 | Number | Model | Details.Id | Details.Value |
 |--------|-------|------------|---------------|
@@ -47,6 +48,7 @@ struql represents it as a such table:
 
 So now you can filter that data like this:
 ```go
+	sq.Init(dev)
 	filter := []struql.Filter{
 		{FieldName: "Details.Id", Value: int32(1), Operation: struql.ComparisonGreater},
 		{FieldName: "Details.Value", Value: "S", Operation: struql.ComparisonBeginWith},

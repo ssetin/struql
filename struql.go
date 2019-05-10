@@ -5,14 +5,13 @@ import (
 	"reflect"
 )
 
-// StruQL ...
+// StruQL implements struct to table transforming algorithm
 type StruQL struct {
-	Rows RowCollection
-
+	Rows       RowCollection
 	currentRow int
 }
 
-// Init ...
+// Init - initialize struql from presented object (struct)
 func (s *StruQL) Init(object interface{}) error {
 	reflObjectValue := reflect.ValueOf(object)
 	dataKind := reflObjectValue.Kind()
@@ -30,12 +29,11 @@ func (s *StruQL) Init(object interface{}) error {
 	return err
 }
 
-// Where ...
+// Where collects data in the rows according to filters
 func (s *StruQL) Where(result RowCollection, filters ...Filter) (RowCollection, error) {
 	return s.Rows.Where(result, filters...)
 }
 
-// expandRow ...
 func (s *StruQL) copyRow(row Row) {
 	newRow := &Row{}
 	newRow.Init()
@@ -47,7 +45,7 @@ func (s *StruQL) copyRow(row Row) {
 	s.currentRow++
 }
 
-// Print ...
+// String represents struql rows as string
 func (s StruQL) String() string {
 	return s.Rows.String()
 }
@@ -64,6 +62,9 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 	case reflect.Struct:
 		for i := 0; i < reflObjectValue.NumField(); i++ {
 			fieldValue := reflObjectValue.Field(i)
+			if !fieldValue.CanInterface() {
+				continue
+			}
 			fieldKind := fieldValue.Kind()
 
 			switch fieldKind {
