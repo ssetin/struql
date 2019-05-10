@@ -22,14 +22,14 @@ type Row struct {
 type RowCollection []*Row
 
 // NewRow creates new initialized row
-func NewRow() *Row {
+func newRow() *Row {
 	row := &Row{}
-	row.Init()
+	row.init()
 	return row
 }
 
 // Init initializes row, allocating memory for fields
-func (r *Row) Init() {
+func (r *Row) init() {
 	r.fieldMap = make(map[string]*Field)
 	r.fieldList = make([]*Field, 0, 2)
 }
@@ -78,7 +78,7 @@ func (r RowCollection) Where(result RowCollection, filters ...Filter) (RowCollec
 	filtersLen = len(filters)
 
 	for idx := 0; idx < len(filters); idx++ {
-		err = filters[idx].Validate(r)
+		err = filters[idx].validate(r)
 		if err != nil {
 			return nil, err
 		}

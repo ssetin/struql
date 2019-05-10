@@ -34,7 +34,7 @@ type Filter struct {
 }
 
 // Validate check field and get fieldIndex from row
-func (f *Filter) Validate(r RowCollection) error {
+func (f *Filter) validate(r RowCollection) error {
 	if len(r) == 0 {
 		return errors.New("empty dataset")
 	}

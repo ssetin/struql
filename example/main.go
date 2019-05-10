@@ -85,7 +85,7 @@ func main() {
 
 	sq.Init(dev)
 
-	fmt.Println(sq)
+	fmt.Print(sq)
 
 	filter := []struql.Filter{
 		{FieldName: "Oi.Descr", Value: modMe("debUg"), Modifier: modMe},

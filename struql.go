@@ -21,7 +21,7 @@ func (s *StruQL) Init(object interface{}) error {
 	}
 
 	s.Rows = make(RowCollection, 0, 5)
-	row := NewRow()
+	row := newRow()
 	s.Rows = append(s.Rows, row)
 	s.currentRow = 0
 
@@ -36,7 +36,7 @@ func (s *StruQL) Where(result RowCollection, filters ...Filter) (RowCollection, 
 
 func (s *StruQL) copyRow(row Row) {
 	newRow := &Row{}
-	newRow.Init()
+	newRow.init()
 	for _, f := range row.fieldList {
 		newRow.fieldList = append(newRow.fieldList, f)
 		newRow.fieldMap[f.Name] = f
