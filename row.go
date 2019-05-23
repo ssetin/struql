@@ -151,6 +151,11 @@ func (r RowCollection) String() string {
 	return result
 }
 
+// Count of rows
+func (r RowCollection) Count() int {
+	return len(r)
+}
+
 // String represents row as string
 func (r Row) String() string {
 	var result string

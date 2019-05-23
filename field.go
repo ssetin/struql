@@ -81,11 +81,26 @@ func (f Field) compareEndWith(filter *Filter) (bool, error) {
 	return false, errors.New(errUnsuppotredCompare)
 }
 
-func (f Field) compareIn(filter *Filter) (bool, error) {
+func (f Field) compareExists(filter *Filter) (bool, error) {
 	if f.kind == reflect.Slice {
 		fieldValue := reflect.ValueOf(f.Value)
 		for j := 0; j < fieldValue.Len(); j++ {
 			if fieldValue.Index(j).Interface() == filter.Value {
+				return true, nil
+			}
+		}
+	} else {
+		return false, errors.New(errUnsuppotredCompare)
+	}
+	return false, nil
+}
+
+func (f Field) compareIn(filter *Filter) (bool, error) {
+	filterValue := reflect.ValueOf(filter.Value)
+
+	if f.kind != reflect.Slice && filterValue.Kind() == reflect.Slice {
+		for j := 0; j < filterValue.Len(); j++ {
+			if filterValue.Index(j).Interface() == f.Value {
 				return true, nil
 			}
 		}
@@ -107,6 +122,8 @@ func (f Field) compare(filter *Filter) (bool, error) {
 		return f.compareBeginWith(filter)
 	case ComparisonEndWith:
 		return f.compareEndWith(filter)
+	case ComparisonExists:
+		return f.compareExists(filter)
 	case ComparisonIn:
 		return f.compareIn(filter)
 	}

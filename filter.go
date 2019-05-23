@@ -7,6 +7,8 @@ import (
 const (
 	// ComparisonEqual - =
 	ComparisonEqual = iota
+	// ComparisonIn - in [values]
+	ComparisonIn
 	// ComparisonGreater - >
 	ComparisonGreater
 	// ComparisonLesser - <
@@ -15,8 +17,8 @@ const (
 	ComparisonBeginWith
 	// ComparisonEndWith - like '%value'
 	ComparisonEndWith
-	// ComparisonIn - value in[]
-	ComparisonIn
+	// ComparisonExists - value in[]
+	ComparisonExists
 )
 
 // ValueModifier - callback for transforming field value before compare

@@ -201,6 +201,7 @@ func TestGeneral(t *testing.T) {
 	if err == nil {
 		t.Error("Should be error on quering with unexisting fieldname in filter")
 	}
+
 }
 
 func TestQuering(t *testing.T) {
@@ -219,6 +220,16 @@ func TestQuering(t *testing.T) {
 			},
 		},
 		{
+			caseName: "1.1. Simple inValue filter",
+			filter: []Filter{
+				{FieldName: "Oi.Santa.Clause", Value: []string{"Baltic", "Pacific"}, Operation: ComparisonIn},
+			},
+			values: fieldValues{
+				fieldName: "Oi.Santa.ID",
+				values:    []interface{}{34, 35},
+			},
+		},
+		{
 			caseName: "2. String begin with + modifier",
 			filter: []Filter{
 				{FieldName: "Oi.Code", Value: "x25990"},
@@ -234,7 +245,7 @@ func TestQuering(t *testing.T) {
 			filter: []Filter{
 				{FieldName: "Oi.ID", Value: int32(200), Operation: ComparisonLesser},
 				{FieldName: "Version", Value: float32(3.78), Operation: ComparisonEqual},
-				{FieldName: "Oi.Santa.Chain", Value: 39, Operation: ComparisonIn},
+				{FieldName: "Oi.Santa.Chain", Value: 39, Operation: ComparisonExists},
 			},
 			values: fieldValues{
 				fieldName: "Oi.Santa.ID",
