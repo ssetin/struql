@@ -297,7 +297,7 @@ func TestQuering(t *testing.T) {
 		{
 			caseName: "9. Unsupported Comparison 5",
 			filter: []Filter{
-				{FieldName: "Number", Value: 1, Operation: ComparisonIn},
+				{FieldName: "Number", Value: 1, Operation: ComparisonExists},
 			},
 			err: errors.New("unsupported comparison"),
 		},

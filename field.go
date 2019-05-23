@@ -100,7 +100,7 @@ func (f Field) compareIn(filter *Filter) (bool, error) {
 
 	if f.kind != reflect.Slice && filterValue.Kind() == reflect.Slice {
 		for j := 0; j < filterValue.Len(); j++ {
-			if filterValue.Index(j).Interface() == f.Value {
+			if f.passModifier(filter.Modifier) == filterValue.Index(j).Interface() {
 				return true, nil
 			}
 		}
