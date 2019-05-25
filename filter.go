@@ -7,17 +7,17 @@ import (
 const (
 	// ComparisonEqual - =
 	ComparisonEqual = iota
-	// ComparisonIn - in [values]
+	// ComparisonIn - field in [values]
 	ComparisonIn
 	// ComparisonGreater - >
 	ComparisonGreater
 	// ComparisonLesser - <
 	ComparisonLesser
-	// ComparisonBeginWith - like 'value%'
+	// ComparisonBeginWith - field like 'value%'
 	ComparisonBeginWith
-	// ComparisonEndWith - like '%value'
+	// ComparisonEndWith - field like '%value'
 	ComparisonEndWith
-	// ComparisonExists - value in[]
+	// ComparisonExists - value in[field values]
 	ComparisonExists
 )
 

@@ -96,11 +96,12 @@ func (f Field) compareExists(filter *Filter) (bool, error) {
 }
 
 func (f Field) compareIn(filter *Filter) (bool, error) {
-	filterValue := reflect.ValueOf(filter.Value)
+	filterValues := reflect.ValueOf(filter.Value)
+	fieldValue := f.passModifier(filter.Modifier)
 
-	if f.kind != reflect.Slice && filterValue.Kind() == reflect.Slice {
-		for j := 0; j < filterValue.Len(); j++ {
-			if f.passModifier(filter.Modifier) == filterValue.Index(j).Interface() {
+	if f.kind != reflect.Slice && filterValues.Kind() == reflect.Slice {
+		for j := 0; j < filterValues.Len(); j++ {
+			if fieldValue == filterValues.Index(j).Interface() {
 				return true, nil
 			}
 		}

@@ -309,6 +309,13 @@ func TestQuering(t *testing.T) {
 			err: errors.New("unsupported comparison"),
 		},
 		{
+			caseName: "10.1. Unsupported Comparison 7",
+			filter: []Filter{
+				{FieldName: "Oi.Santa.Clause", Value: "Baltic", Operation: ComparisonIn},
+			},
+			err: errors.New("unsupported comparison"),
+		},
+		{
 			caseName: "11. Another filters",
 			filter: []Filter{
 				{FieldName: "Oi.Santa.ID", Value: 20, Operation: ComparisonLesser},
@@ -347,6 +354,10 @@ func RunQueringTests(t *testing.T, cases []CR) {
 			if err != nil {
 				t.Error(err)
 				return
+			}
+
+			if len(collectedVals) != dataSet.Count() {
+				t.Errorf("\nWrong rows count: Want %d\n Got: %d\n", dataSet.Count(), len(collectedVals))
 			}
 
 			if !reflect.DeepEqual(collectedVals, testCase.values.values) {
