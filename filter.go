@@ -7,6 +7,8 @@ import (
 const (
 	// ComparisonEqual - =
 	ComparisonEqual = iota
+	// ComparisonNotEqual - !=
+	ComparisonNotEqual
 	// ComparisonIn - field in [values]
 	ComparisonIn
 	// ComparisonGreater - >

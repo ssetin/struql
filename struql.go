@@ -67,6 +67,10 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 			}
 			fieldKind := fieldValue.Kind()
 
+			if fieldKind == reflect.Slice && fieldValue.IsNil() {
+				fieldValue = reflect.MakeSlice(fieldValue.Type(), 1, 1)
+			}
+
 			switch fieldKind {
 			case reflect.Struct:
 				s.object2table(fieldValue.Interface(), objPrefix+reflObjectValue.Type().Field(i).Name)
@@ -79,7 +83,11 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 						elemKind := elem.Kind()
 
 						if elemKind == reflect.Ptr {
-							elem = reflect.Indirect(elem)
+							if elem.IsNil() {
+								elem = reflect.Zero(elem.Type().Elem())
+							} else {
+								elem = reflect.Indirect(elem)
+							}
 							elemKind = elem.Kind()
 						}
 
@@ -92,10 +100,7 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 							s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 						}
 					}
-				} else {
-					s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 				}
-
 			default:
 				s.Rows.AddField(objPrefix+reflObjectValue.Type().Field(i).Name, fieldValue.Interface())
 			}

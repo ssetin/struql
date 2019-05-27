@@ -15,7 +15,7 @@ type santa struct {
 type origins struct {
 	Code  string
 	Descr string
-	Santa []santa
+	Santa []*santa
 }
 
 type device struct {
@@ -47,16 +47,20 @@ func main() {
 			{
 				Code:  "x256",
 				Descr: "Debug",
-				Santa: []santa{
+				Santa: []*santa{
 					{ID: 1, Clause: "Hoho"},
 					{ID: 2, Clause: "Tree"},
 					{ID: 3, Clause: "Tree"},
 				},
 			},
 			{
+				Code:  "909090909",
+				Descr: "________",
+			},
+			{
 				Code:  "x2599",
 				Descr: "Release",
-				Santa: []santa{
+				Santa: []*santa{
 					{ID: 1, Clause: "Tooo"},
 					{ID: 2, Clause: "Mooo"},
 					{ID: 3, Clause: "Laaa"},
@@ -66,7 +70,7 @@ func main() {
 			{
 				Code:  "x25990",
 				Descr: "Profile",
-				Santa: []santa{
+				Santa: []*santa{
 					{ID: 1, Clause: "Moose"},
 					{ID: 2, Clause: "Fox"},
 					{ID: 3, Clause: "Black"},
@@ -79,6 +83,10 @@ func main() {
 					{ID: 10, Clause: "Tiger"},
 					{ID: 11, Clause: "Tree"},
 				},
+			},
+			{
+				Code:  "t909090",
+				Descr: "==========",
 			},
 		},
 	}

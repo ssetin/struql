@@ -60,6 +60,11 @@ var (
 				},
 			},
 			{
+				ID:    335,
+				Code:  "t909090",
+				Descr: "Profile",
+			},
+			{
 				ID:    191,
 				Code:  "x2599",
 				Descr: "Release",
@@ -227,6 +232,19 @@ func TestQuering(t *testing.T) {
 			values: fieldValues{
 				fieldName: "Oi.Santa.ID",
 				values:    []interface{}{34, 35},
+			},
+		},
+		{
+			caseName: "1.2. Simple not equal filter",
+			filter: []Filter{
+				{FieldName: "Oi.Descr", Value: "Debug"},
+				{FieldName: "Oi.Santa.ID", Value: 1, Operation: ComparisonGreater},
+				{FieldName: "Oi.Santa.Clause", Value: "Tree"},
+				{FieldName: "Oi.Santa.ID", Value: 2, Operation: ComparisonNotEqual},
+			},
+			values: fieldValues{
+				fieldName: "Oi.Santa.ID",
+				values:    []interface{}{3},
 			},
 		},
 		{

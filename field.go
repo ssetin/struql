@@ -67,6 +67,10 @@ func (f Field) compareEqual(filter *Filter) (bool, error) {
 	return f.passModifier(filter.Modifier) == filter.Value, nil
 }
 
+func (f Field) compareNotEqual(filter *Filter) (bool, error) {
+	return f.passModifier(filter.Modifier) != filter.Value, nil
+}
+
 func (f Field) compareBeginWith(filter *Filter) (bool, error) {
 	if f.kind == reflect.String {
 		return strings.HasPrefix(f.passModifier(filter.Modifier).(string), filter.Value.(string)), nil
@@ -115,6 +119,8 @@ func (f Field) compare(filter *Filter) (bool, error) {
 	switch filter.Operation {
 	case ComparisonEqual:
 		return f.compareEqual(filter)
+	case ComparisonNotEqual:
+		return f.compareNotEqual(filter)
 	case ComparisonGreater:
 		return f.compareGreater(filter)
 	case ComparisonLesser:
