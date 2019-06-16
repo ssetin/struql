@@ -67,7 +67,7 @@ func (s *StruQL) object2table(object interface{}, prefix ...string) error {
 			}
 			fieldKind := fieldValue.Kind()
 
-			if fieldKind == reflect.Slice && fieldValue.IsNil() {
+			if fieldKind == reflect.Slice && (fieldValue.IsNil() || fieldValue.Len() == 0) {
 				fieldValue = reflect.MakeSlice(fieldValue.Type(), 1, 1)
 			}
 

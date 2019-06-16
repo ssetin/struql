@@ -87,6 +87,7 @@ func main() {
 			{
 				Code:  "t909090",
 				Descr: "==========",
+				Santa: []*santa{},
 			},
 		},
 	}

@@ -65,6 +65,12 @@ var (
 				Descr: "Profile",
 			},
 			{
+				ID:    399,
+				Code:  "a90e100",
+				Descr: "Beaver",
+				Santa: []*santa{},
+			},
+			{
 				ID:    191,
 				Code:  "x2599",
 				Descr: "Release",
