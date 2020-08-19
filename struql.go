@@ -13,7 +13,7 @@ type StruQL struct {
 
 // Init - initialize struql from presented object (struct)
 func (s *StruQL) Init(object interface{}) error {
-	reflObjectValue := reflect.ValueOf(object)
+	reflObjectValue := reflect.Indirect(reflect.ValueOf(object))
 	dataKind := reflObjectValue.Kind()
 
 	if dataKind != reflect.Struct {
@@ -25,7 +25,7 @@ func (s *StruQL) Init(object interface{}) error {
 	s.Rows = append(s.Rows, row)
 	s.currentRow = 0
 
-	err := s.object2table(object)
+	err := s.object2table(reflObjectValue.Interface())
 	return err
 }
 
